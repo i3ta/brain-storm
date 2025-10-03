@@ -128,7 +128,7 @@ export const Proposal = () => {
         Preprocessing
       </Text>
       <Text>To preprocess our data, we have three potential approaches:</Text>
-      <ul className="list-disc list-outside ml-8 space-y-2">
+      <ul className="list-disc list-outside ml-8 space-y-2 pb-2">
         <li>
           <Text>
             <b>Grayscale</b>: The dataset we are using is assembled from several
@@ -211,7 +211,7 @@ export const Proposal = () => {
       <Text>
         To evaluate our models, we plan on using the following metrics:
       </Text>
-      <ul className="list-disc list-outside ml-8 space-y-2">
+      <ul className="list-disc list-outside ml-8 space-y-2 pb-2">
         <li className="clear-both">
           <Image
             src="https://media.geeksforgeeks.org/wp-content/uploads/20240708132251/confusion-Matrix.PNG"

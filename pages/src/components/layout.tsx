@@ -25,7 +25,7 @@ export const Layout = () => {
         "flex flex-col items-center",
       )}
     >
-      <div className="z-100 w-full fixed top-0 pt-4 pb-8 flex justify-center bg-linear-to-b from-neutral-900 to-neutral-900/0">
+      <div className="print-hide z-100 w-full fixed top-0 pt-4 pb-8 flex justify-center bg-linear-to-b from-neutral-900 to-neutral-900/0">
         <Tabs value={currentPath} onValueChange={handleChange}>
           <TabsList>
             <TabsTrigger value="">Home</TabsTrigger>
@@ -38,6 +38,7 @@ export const Layout = () => {
       <Outlet />
       <div
         className={cn(
+          "print-hide",
           "w-11/12 max-w-5xl p-4 mt-16 mb-8 rounded-xl border bg-neutral-800/50",
           "flex flex-col items-center",
         )}

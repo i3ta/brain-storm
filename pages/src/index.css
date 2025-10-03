@@ -126,13 +126,30 @@ body {
 }
 
 @media print {
+  @page {
+    margin: 1cm 1cm 1cm 1cm;
+  }
+  body {
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+  }
+
   p {
     background-color: white;
     color: black;
   }
-  span {
-    background-color: white;
-    color: white;
+
+  .print-hide {
+    display: none;
   }
 }
 
