@@ -2,7 +2,16 @@ import { Divider } from "@/components/ui/divider";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
 import Latex from "react-latex-next";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import pituitaryImage from "@/assets/pituitary1002.jpg";
+import gantt from "@/assets/GanttChart.xlsx.png";
 
 export const Proposal = () => {
   const references = [
@@ -279,6 +288,51 @@ export const Proposal = () => {
         Our model is expected to classify an image of a brain scan and classify
         it as glioma, meningioma, pituitary, or healthy.
       </Text>
+      <Text size="h2" id="responsibilities">
+        Responsibilities
+      </Text>
+      <Divider />
+      <Text size="h3" id="gantt-chart">
+        Gantt Chart
+      </Text>
+      <img
+        src={gantt}
+        alt="Gantt chart of planned tasks duration and deadlines"
+        className="m-4"
+      />
+      <Text size="h3" id="contributions">
+        Contribution Table
+      </Text>
+      <Table className="mt-4">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Proposal Contributions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Aaron Hung</TableCell>
+            <TableCell>Methods, Slides</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Aaron Fan</TableCell>
+            <TableCell>Slides, Results</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Ritika Calyanakoti</TableCell>
+            <TableCell>Problem Definition, Slides</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Hannah Hsiao</TableCell>
+            <TableCell>Data Overview, Gantt Chart</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Sagarika Srinivasan</TableCell>
+            <TableCell>Introduction and Background</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <Text size="h2" id="references">
         References
       </Text>
