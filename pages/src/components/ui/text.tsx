@@ -45,7 +45,7 @@ export const Text = ({
         {id && size != "p" && (
           <span
             className={cn(
-              "absolute top-0 -left-2.5 -translate-x-full transition-all cursor-pointer",
+              "print-hide absolute top-0 -left-2.5 -translate-x-full transition-all cursor-pointer",
               sizeClasses[size],
               "text-neutral-700 hover:text-neutral-500",
               className,

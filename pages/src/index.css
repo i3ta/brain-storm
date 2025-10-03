@@ -143,7 +143,9 @@ body {
     overflow: visible;
   }
 
-  p {
+  p,
+  td,
+  th {
     background-color: white;
     color: black;
   }
