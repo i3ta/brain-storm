@@ -11,8 +11,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/cs4641-team24/",
-  build: {
-    outDir: "docs",
-  },
+  base: "/pages/chung62/cs4641-team24/",
 });

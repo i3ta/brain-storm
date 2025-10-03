@@ -124,3 +124,18 @@ body {
   overflow-x: hidden;
   background-color: oklch(20.5% 0 0);
 }
+
+@media print {
+  p {
+    background-color: white;
+    color: black;
+  }
+  span {
+    background-color: white;
+    color: white;
+  }
+}
+
+.katex-html {
+  display: none;
+}

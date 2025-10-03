@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      const base = "/pages/chung62/cs4641-team24";
+      const hash = window.location.hash;
+      const path = window.location.pathname.replace(base, "");
+      const redirectUrl = base + "?redirect=" + encodeURIComponent(path);
+      console.log("Redirecting to:", redirectUrl + hash);
+      window.location.href = redirectUrl + hash;
+    </script>
+  </head>
+  <body></body>
+</html>

@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Toaster } from "./ui/sonner";
+import { Text } from "./ui/text";
 
 export const Layout = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export const Layout = () => {
         "flex flex-col items-center",
       )}
     >
-      <div className="w-full fixed top-4 flex justify-center">
+      <div className="z-100 w-full fixed top-0 pt-4 pb-8 flex justify-center bg-linear-to-b from-neutral-900 to-neutral-900/0">
         <Tabs value={currentPath} onValueChange={handleChange}>
           <TabsList>
             <TabsTrigger value="">Home</TabsTrigger>
@@ -35,6 +36,20 @@ export const Layout = () => {
         </Tabs>
       </div>
       <Outlet />
+      <div
+        className={cn(
+          "w-11/12 max-w-5xl p-4 mt-16 mb-8 rounded-xl border bg-neutral-800/50",
+          "flex flex-col items-center",
+        )}
+      >
+        <Text size="c">
+          Written By Team 24 for Georgia Tech CS 4641, Fall 2025
+        </Text>
+        <Text size="c">
+          Copyright 2025 © Ritika Calyanakoti, Aaron Fan, Hannah Hsiao, Aaron
+          Hung, Sagarika Srinivasan
+        </Text>
+      </div>
       <Toaster richColors />
     </div>
   );
