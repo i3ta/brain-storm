@@ -1,0 +1,11 @@
+[project]
+name = "daikon"
+version = "0.0.1"
+description = "Package of all helper functions for performing brain tumor classification using machine learning"
+dependencies = [
+  "tqdm",
+  "numpy",
+  "opencv-python",
+  "dill"
+]
+
