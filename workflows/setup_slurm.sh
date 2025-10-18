@@ -52,4 +52,5 @@ snakemake \
     cpus_per_task=$CPUS \
     mem_mb=${MEM%G}000 \
   --slurm-logdir ~/.snakemake/slurm_logs/$LOG_DIR \
+  --latency-wait 30 \
   "$@"
