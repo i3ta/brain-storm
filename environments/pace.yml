@@ -75,6 +75,7 @@ dependencies:
   - jasper=2.0.33=ha77e612_0
   - jbig=2.1=h7f98852_2003
   - jinja2=3.1.6=pyhd8ed1ab_0
+  - joblib=1.5.2=py311h06a4308_0
   - jpeg=9e=h166bdaf_1
   - jsonschema=4.25.1=pyhe01879c_0
   - jsonschema-specifications=2025.9.1=pyhcf101f3_0
@@ -211,6 +212,8 @@ dependencies:
   - reretry=0.11.8=pyhd8ed1ab_1
   - rich=14.2.0=pyhcf101f3_0
   - rpds-py=0.22.3=py311h4aa5aa6_0
+  - scikit-learn=1.7.2=py311h505adc9_0
+  - scipy=1.16.2=py311ha592af2_0
   - setuptools=80.9.0=py311h06a4308_0
   - shellingham=1.5.4=pyhd8ed1ab_1
   - sip=6.10.0=py311h6a678d5_0
@@ -234,6 +237,7 @@ dependencies:
   - tbb=2022.0.0=hdb19cb5_0
   - tbb-devel=2022.0.0=hdb19cb5_0
   - tesseract=5.2.0=h6a678d5_2
+  - threadpoolctl=3.5.0=py311h92b7b1e_0
   - throttler=1.2.2=pyhd8ed1ab_0
   - tk=8.6.15=h54e0aa7_0
   - tomli=2.3.0=pyhcf101f3_0
