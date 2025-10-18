@@ -32,10 +32,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Logging setup
-LOG_DIR="results/logs"
 mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-LOG_FILE="$LOG_DIR/${NAME}_${TIMESTAMP}.log"
+LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
 # Run Snakemake
 echo "[$(date)] Starting Snakemake with:"
@@ -43,11 +42,12 @@ echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME"
 echo "  Logs -> $LOG_FILE"
 
 snakemake \
-  --jobs "$JOBS" \
-  --use-conda \
-  --rerun-incomplete \
-  --keep-going \
-  --printshellcmds \
-  --latency-wait 60 \
-  --cluster "sbatch --job-name=$NAME --time=$TIME --cpus-per-task=$CPUS --mem=$MEM --output=$LOG_DIR/%x_%j.out --error=$LOG_DIR/%x_%j.err" \
-  "$@" > "$LOG_FILE" 2>&1
+  --executor slurm \
+  -j $JOBS \
+  --default-resources \
+    slurm_partition=default \
+    runtime=$TIME \
+    cpus_per_task=$CPUS \
+    mem_mb=${MEM%G}000 \
+  --slurm-logdir ~/.snakemake/slurm_logs/$LOG_DIR \
+  "$@"
