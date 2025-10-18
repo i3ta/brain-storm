@@ -14,6 +14,7 @@ CPUS=4
 MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
+PARTITION="ice-cpu"
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -23,6 +24,7 @@ while [[ $# -gt 0 ]]; do
     --mem) MEM="$2"; shift 2 ;;
     --jobs) JOBS="$2"; shift 2 ;;
     --name) NAME="$2"; shift 2 ;;
+    --part) PARTITION="$2"; shift 2 ;;
     --help)
       echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [snakemake args]"
       exit 0
@@ -45,8 +47,8 @@ snakemake \
   --executor slurm \
   -j $JOBS \
   --default-resources \
-    slurm_partition=default \
-    runtime=$TIME \
+    walltime=$TIME \
+    slurm_partition=$PARTITION \
     cpus_per_task=$CPUS \
     mem_mb=${MEM%G}000 \
   --slurm-logdir ~/.snakemake/slurm_logs/$LOG_DIR \
