@@ -74,8 +74,12 @@ def main(
         capprops=dict(color="black"),
     )
     for i, contr in enumerate(all_contr):
-        x_jitter = np.random.normal(i + 1, 0.03, size=len(contr))
-        ax2.scatter(x_jitter, contr, color="black", s=8, alpha=0.6, zorder=3)
+        sample_size = max(1, int(len(contr) * 0.1))
+        sample_indices = np.random.choice(len(contr), size=sample_size, replace=False)
+        sampled_contr = contr[sample_indices]
+
+        x_jitter = np.random.normal(i + 1, 0.03, size=len(sampled_contr))
+        ax2.scatter(x_jitter, sampled_contr, color="black", s=8, alpha=0.6, zorder=3)
 
     ax2.set_xticks(np.arange(1, len(contr_labels) + 1), labels=contr_labels)
     ax2.set_xlim(0.2, len(contr_labels) + 0.8)
