@@ -19,8 +19,11 @@ rule run_eda:
 
 rule image_dim_dist:
     input:
-        "results/{folder}/summary/{type}_data_summary.pkl",
+        "results/{folder}/summary/glioma_data_summary.pkl",
+        "results/{folder}/summary/meningioma_data_summary.pkl",
+        "results/{folder}/summary/no_tumor_data_summary.pkl",
+        "results/{folder}/summary/pituitary_data_summary.pkl",
     output:
-        "results/{folder}/summary/{type}_dims.png"
+        "results/{folder}/summary/raw_image_dims.png"
     script:
         "../scripts/image_dim_dist.py"

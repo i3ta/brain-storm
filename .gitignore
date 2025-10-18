@@ -174,3 +174,4 @@ cython_debug/
 # Data files
 data/
 **/.snakemake/
+**/.DS_Store
