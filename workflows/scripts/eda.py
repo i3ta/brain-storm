@@ -53,7 +53,13 @@ def main(
 
         offset = bar_width * i
         color = colors[i % len(colors)]
-        rects = ax1.bar(x + offset, dim_counts, bar_width, label=category, color=color)
+        rects = ax1.bar(
+            x + offset,
+            dim_counts,
+            bar_width,
+            label=f"{category} (n = {dims.shape[0]})",
+            color=color,
+        )
         ax1.bar_label(rects, padding=3)
 
     ax1.set_title(f"Common Image Dimensions (n = {n})")
@@ -74,7 +80,7 @@ def main(
         capprops=dict(color="black"),
     )
     for i, contr in enumerate(all_contr):
-        sample_size = max(1, int(len(contr) * 0.1))
+        sample_size = max(1, int(len(contr) * 0.05))
         sample_indices = np.random.choice(len(contr), size=sample_size, replace=False)
         sampled_contr = contr[sample_indices]
 
