@@ -14,6 +14,6 @@ def generate_histogram(image_path: str) -> npt.NDArray[np.int32]:
     image_flat = image.reshape(1, -1)
     hist = np.zeros(256, dtype=np.int32)
     for br in range(256):
-        hist[br] = np.count_nonzero(image_flat == br)
+        hist[br] = np.count_nonzero(image_flat == br) / image.shape[1]
 
     return hist
