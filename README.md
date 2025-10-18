@@ -2,6 +2,8 @@
 
 ## Installation
 
+### Setup environment
+
 To get local programs set up, you have to run from inside the `src/` folder:
 
 ```bash
