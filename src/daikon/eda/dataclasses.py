@@ -26,12 +26,3 @@ class DataAnalysisOutput(BaseDataClass):
     n: int  # Number of images total
     dims: npt.NDArray[np.int32]  # Dimensions of each image (width, height, channels)
     contr: npt.NDArray[np.float32]  # Root mean square contrast of each image
-
-
-@dataclass
-class DataSummary(BaseDataClass):
-    """
-    Summary data for all image categories.
-    """
-
-    n: int

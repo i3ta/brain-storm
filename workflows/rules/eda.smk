@@ -13,6 +13,14 @@ rule run_eda:
         "results/{folder}/summary/no_tumor_data_summary.pkl",
         "results/{folder}/summary/pituitary_data_summary.pkl",
     output:
-        "results/{folder}/summary/data_summary.png"
+        "results/{folder}/summary/raw_data_summary.png"
     script:
         "../scripts/eda.py"
+
+rule image_dim_dist:
+    input:
+        "results/{folder}/summary/{type}_data_summary.pkl",
+    output:
+        "results/{folder}/summary/{type}_dims.png"
+    script:
+        "../scripts/image_dim_dist.py"
