@@ -69,6 +69,7 @@ def main(
     image_extensions = (".png", ".jpg", ".jpeg")
     found = set()  # Classes that we already have images for
     for i, dir in enumerate(data_dirs):
+        added = 0
         for image in os.listdir(dir):
             if image.lower().endswith(image_extensions):
                 img_path = os.path.join(dir, image)
@@ -78,6 +79,9 @@ def main(
                     found.add((i, res[0]))
                     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
                     axs[i, res[0]].imshow(img, cmap="gray")
+                    added += 1
+                if added == k:
+                    break
 
     for i, label in enumerate(row_labels):
         axs[i, 0].set_ylabel(label)
