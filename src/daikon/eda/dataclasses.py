@@ -42,6 +42,18 @@ class ImagePixelHistogram(BaseDataClass):
 
 
 @dataclass
+class ImagePixelRings(BaseDataClass):
+    """
+    Dataclass for image pixel brightness histogram.
+    """
+
+    n: int  # Number of images total
+    hist: dict[
+        str, npt.NDArray[np.float32]
+    ]  # Dictionary of image name to pixel brightness histogram
+
+
+@dataclass
 class ImagePixelClustering(BaseDataClass):
     """
     Dataclass for clustered image pixel brightness

@@ -41,12 +41,29 @@ rule run_histogram_clustering:
     script:
         "../scripts/eda/histogram_clustering.py"
 
+rule run_class_rings:
+    input:
+        "../data/{folder}/{type}"
+    output:
+        "results/{folder}/rings/data/{type}_hist.pkl"
+    script:
+        "../scripts/eda/class_rings.py"
+
+rule run_rings_clustering:
+    input:
+        lambda wildcards: expand("results/{folder}/rings/data/{classes}_hist.pkl", folder=wildcards.folder, classes=CLASSES)
+    output:
+        "results/{folder}/rings/cluster/cluster_{k}.pkl"
+    script:
+        "../scripts/eda/rings_clustering.py"
+
 rule run_visualize_clustering:
     input:
-        lambda wildcards: expand("results/{folder}/hist/cluster/cluster_{clusters}.pkl", folder=wildcards.folder, clusters=CLUSTERS),
+        lambda wildcards: expand("results/{folder}/{cluster_type}/cluster/cluster_{clusters}.pkl", 
+          folder=wildcards.folder, cluster_type=wildcards.cluster_type, clusters=CLUSTERS),
         lambda wildcards: expand("../data/{folder}/{classes}", folder=wildcards.folder, classes=CLASSES)
     output:
-        "results/{folder}/hist/cluster_{k}.png",
-        "results/{folder}/hist/example_{k}.png"
+        "results/{folder}/{cluster_type}/cluster_{k}.png",
+        "results/{folder}/{cluster_type}/example_{k}.png"
     script:
         "../scripts/eda/visualize_clustering.py"

@@ -4,13 +4,14 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-from daikon.eda.clustering import generate_histogram
+from daikon.eda.clustering import generate_circle_brightness, generate_histogram
 from daikon.eda.dataclasses import ImagePixelClustering
 
 
 def main(
     input_clusters: list[str],
     data_dirs: str,
+    type: str,
     k: int,
     output_line: str,
     output_examples: str,
@@ -21,6 +22,7 @@ def main(
     Args:
         input_clusters (list[str]): List of paths for all clusters
         data (str): Folder for data
+        type (str): Type of image dimensionality reduction
         k (int): Target number of clusters
         output_file (str): Output file name
     """
@@ -73,8 +75,11 @@ def main(
         for image in os.listdir(dir):
             if image.lower().endswith(image_extensions):
                 img_path = os.path.join(dir, image)
-                hist = generate_histogram(img_path)
-                res = target_kmeans.predict([hist])
+                if type == "hist":
+                    data = generate_histogram(img_path)
+                else:
+                    data = generate_circle_brightness(img_path, 32)
+                res = target_kmeans.predict([data])
                 if (i, res[0]) not in found:
                     found.add((i, res[0]))
                     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
@@ -108,6 +113,7 @@ if __name__ == "__main__" and "snakemake" in locals():
         input_clusters=snakemake.input[:-4],
         data_dirs=snakemake.input[-4:],
         k=int(snakemake.wildcards.k),
+        type=snakemake.wildcards.cluster_type,
         output_line=snakemake.output[0],
         output_examples=snakemake.output[1],
     )
