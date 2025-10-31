@@ -1,0 +1,25 @@
+seed: 20010254
+
+preprocessing:
+  # image_count: 100 # Set if a fixed number of images is needed
+
+  # Proportion of data for testing (remaining for training)
+  test_prop: 0.2
+
+  # Image size, in pixels
+  image_width: 512
+  image_height: 512
+
+  # Random rotation degrees range
+  rotation_low: -5
+  rotation_high: 5
+
+  # Random brightness multiplier
+  brightness_low: 0.9
+  brightness_high: 1.1
+
+  # Random brightness shift
+  brightness_shift_low: -20
+  brightness_shift_high: 20
+
+  noise_variance: 0.1
