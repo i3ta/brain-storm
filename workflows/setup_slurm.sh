@@ -74,7 +74,7 @@ if [[ "$GPUS" -gt 0 ]]; then
   if [[ -n "$GPU_TYPE" ]]; then
     SLURM_EXTRA="--gres=gpu:${GPU_TYPE}:$GPUS"
   else
-    SLURM_EXTRA="--gres=gpu:$GPUS"
+    SLURM_EXTRA="--gres=gpu::$GPUS"
   fi
 fi
 
