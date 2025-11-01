@@ -12,6 +12,7 @@ MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
 QOS="coc-ice"
+PART="ice-cpu"
 GPUS=0 # default no GPU
 GPU_TYPE="" # optional GPU type specification
 
@@ -61,17 +62,10 @@ if [[ "$GPUS" -gt 0 ]]; then
   fi
 fi
 
-# Build resource flags - ALL in one array
-RESOURCE_FLAGS=(
-  walltime=$TIME
-  cpus_per_task=$CPUS
-  mem_mb=${MEM%G}000
-  slurm_qos=$QOS
-)
-
 # Add GPU resources if requested
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
+  PART="ice-gpu"
   
   # Build and add slurm_extra for GPU
   if [[ -n "$GPU_TYPE" ]]; then
@@ -80,6 +74,15 @@ if [[ "$GPUS" -gt 0 ]]; then
     RESOURCE_FLAGS+=(slurm_extra="--gres=gpu:$GPUS")
   fi
 fi
+
+# Build resource flags - ALL in one array
+RESOURCE_FLAGS=(
+  walltime=$TIME
+  cpus_per_task=$CPUS
+  mem_mb=${MEM%G}000
+  slurm_qos=$QOS
+  slurm_partition=$PART
+)
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
