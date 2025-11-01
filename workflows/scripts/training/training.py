@@ -35,6 +35,8 @@ def main(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.is_available():
         print("Using CUDA for training")
+    else:
+        print("Using CPU for training")
 
     # TODO: Add each model here. The model just takes in a string, so you can pass
     #       parameters as part of the string to specify parameters for
