@@ -58,9 +58,12 @@ RESOURCE_FLAGS=(
   mem_mb=${MEM%G}000
 )
 
+EXTRA_EXECUTOR_ARGS=""
+
 # If GPU requested, add GPU resources and change partition if needed
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
+  EXTRA_EXECUTOR_ARGS="--gres=gpu:${GPU_TYPE:-""}:$GPUS"
   if [[ "$PARTITION" == "ice-cpu" ]]; then
     PARTITION="ice-gpu"
     RESOURCE_FLAGS[1]="slurm_partition=$PARTITION"
@@ -77,6 +80,7 @@ snakemake \
   --executor slurm \
   -j "$JOBS" \
   --default-resources "${RESOURCE_FLAGS[@]}" \
+  --executor-arg="$EXTRA_EXECUTOR_ARGS" \
   --slurm-logdir ~/.snakemake/slurm_logs/"$LOG_DIR" \
   --latency-wait 30 \
   "$@"
