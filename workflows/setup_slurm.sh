@@ -11,7 +11,7 @@ CPUS=4
 MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
-QOS=""  # QOS parameter
+QOS="coc-ice"
 GPUS=0 # default no GPU
 GPU_TYPE="" # optional GPU type specification
 
@@ -51,13 +51,11 @@ LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
 # Adjust defaults for GPU jobs
 if [[ "$GPUS" -gt 0 ]]; then
-  # Increase memory for GPU jobs if still at default
   if [[ "$MEM" == "8G" ]]; then
     MEM="16G"
     echo "Note: Increased memory to 16G for GPU job"
   fi
   
-  # Ensure reasonable CPU count for GPU
   if [[ "$CPUS" -lt 4 ]]; then
     CPUS=4
   fi
