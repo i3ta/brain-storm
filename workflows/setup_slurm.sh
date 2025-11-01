@@ -11,7 +11,6 @@ CPUS=4
 MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
-PARTITION="ice-cpu"
 GPUS=0 # default no GPU
 GPU_TYPE="" # optional GPU type specification
 
@@ -50,15 +49,9 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
-# Auto-switch to GPU partition if GPUs requested
-if [[ "$GPUS" -gt 0 ]] && [[ "$PARTITION" == "ice-cpu" ]]; then
-  PARTITION="ice-gpu"
-fi
-
 # Build resource flags
 RESOURCE_FLAGS=(
   walltime=$TIME
-  slurm_partition=$PARTITION
   cpus_per_task=$CPUS
   mem_mb=${MEM%G}000
 )
@@ -74,13 +67,13 @@ if [[ "$GPUS" -gt 0 ]]; then
   if [[ -n "$GPU_TYPE" ]]; then
     SLURM_EXTRA="--gres=gpu:${GPU_TYPE}:$GPUS"
   else
-    SLURM_EXTRA="--gres=gpu::$GPUS"
+    SLURM_EXTRA="--gres=gpu:$GPUS"
   fi
 fi
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
-echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION"
+echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME"
 if [[ "$GPUS" -gt 0 ]]; then
   echo "  GPUS=$GPUS${GPU_TYPE:+, TYPE=$GPU_TYPE}"
   echo "  SLURM_EXTRA: $SLURM_EXTRA"
