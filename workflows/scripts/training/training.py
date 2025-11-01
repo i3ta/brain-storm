@@ -45,8 +45,8 @@ def main(
     #       hyperparameter tuning.
     if model_name == "vgg16_pretrained":
         model = models.vgg16(weights=models.VGG16_Weights.IMAGENET1K_V1)
-        model = model.to(device)
         model.classifier[6] = nn.Linear(model.classifier[6].in_features, 4)
+        model = model.to(device)
         transform = transforms.Compose(
             [transforms.Resize((224, 224)), transforms.ToTensor()]
         )
@@ -66,7 +66,7 @@ def main(
     cv_dataloader = DataLoader(cv_dataset, batch_size=batch_size, shuffle=True)
 
     # Set up loss function and optimizer
-    loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss().to(device)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Run training loop
@@ -74,6 +74,7 @@ def main(
     best_val_loss = float("inf")
     epochs_no_impr = 0
     for _ in tqdm(range(epochs)):
+        model.train()
         for data, labels in train_dataloader:
             data = data.to(device)
             labels = labels.to(device)
