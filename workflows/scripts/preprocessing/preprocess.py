@@ -23,6 +23,7 @@ def main(src: str, dest: str, cfg: dict[str, Any], seed: int):
     # Folders
     dest_tmp = os.path.join(dest, "tmp")
     dest_test = os.path.join(dest, "test")
+    dest_cv = os.path.join(dest, "cv")
     dest_train = os.path.join(dest, "train")
 
     os.makedirs(dest_tmp, exist_ok=True)
@@ -77,8 +78,9 @@ def main(src: str, dest: str, cfg: dict[str, Any], seed: int):
 
             duplicate_image_augment(src_path, dest_path, seed, cfg)
 
-    # Separate data into train and test
+    # Separate data into train, validation, and test
     test_count = int(target_count * cfg["test_prop"])
+    cv_count = int(target_count * cfg["cv_prop"])
     for c in classes:
         # Get all images for class
         src_dir = os.path.join(dest_tmp, c)
@@ -90,24 +92,38 @@ def main(src: str, dest: str, cfg: dict[str, Any], seed: int):
             ]
         )
 
-        # Get indices for testing and training
-        test_idx = rng.choice(
-            np.arange(0, target_count), size=test_count, replace=False
-        )
-        test_img = images[test_idx]
+        indices = np.arange(target_count)
+        rng.shuffle(indices)
 
-        # Move files into test and train folders
+        # Get indices for each type
+        test_idx = indices[:test_count]
+        cv_idx = indices[test_count : test_count + cv_count]
+
+        # Split data
+        test_img = images[test_idx]
+        cv_img = images[cv_idx]
+
+        # Move files into test, cv, and train folders
         dest_dir = os.path.join(dest_test, c)
         os.makedirs(dest_dir, exist_ok=True)
         for img in test_img:
             src_path = os.path.join(src_dir, img)
             shutil.move(src_path, dest_dir)
 
+        dest_dir = os.path.join(dest_cv, c)
+        os.makedirs(dest_dir, exist_ok=True)
+        for img in cv_img:
+            src_path = os.path.join(src_dir, img)
+            shutil.move(src_path, dest_dir)
+
+        # Move remaining images for training
         dest_dir = os.path.join(dest_train, c)
         os.makedirs(dest_dir, exist_ok=True)
         for img in os.listdir(src_dir):
             src_path = os.path.join(src_dir, img)
             shutil.move(src_path, dest_dir)
+
+    shutil.rmtree(dest_tmp)
 
 
 if __name__ == "__main__" and "snakemake" in locals():
