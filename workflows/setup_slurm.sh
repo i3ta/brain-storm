@@ -62,6 +62,10 @@ if [[ "$GPUS" -gt 0 ]]; then
   fi
 fi
 
+if [[ "$GPUS" -gt 0 ]]; then
+  PART="ice-gpu"
+fi
+
 # Build resource flags
 RESOURCE_FLAGS=(
   walltime=$TIME
@@ -74,7 +78,6 @@ RESOURCE_FLAGS=(
 # Add GPU resources if requested
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
-  PART="ice-gpu"
   
   # Build and add slurm_extra for GPU
   if [[ -n "$GPU_TYPE" ]]; then
