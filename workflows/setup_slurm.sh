@@ -11,10 +11,9 @@ CPUS=4
 MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
-PARTITION="ice-cpu"
-QOS=""
-GPUS=0
-GPU_TYPE=""
+QOS=""  # QOS parameter
+GPUS=0 # default no GPU
+GPU_TYPE="" # optional GPU type specification
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -24,8 +23,7 @@ while [[ $# -gt 0 ]]; do
     --mem) MEM="$2"; shift 2 ;;
     --jobs) JOBS="$2"; shift 2 ;;
     --name) NAME="$2"; shift 2 ;;
-    --part) PARTITION="$2"; shift 2 ;;
-    --qos) QOS="$2"; shift 2 ;;  # Add QOS flag
+    --qos) QOS="$2"; shift 2 ;;
     --gpu-type) GPU_TYPE="$2"; shift 2 ;;
     -g|--gpu)
       if [[ "$2" =~ ^[0-9]+$ ]]; then
@@ -37,7 +35,7 @@ while [[ $# -gt 0 ]]; do
       fi
       ;;
     --help)
-      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--part PARTITION] [--qos QOS] [--gpu [N]] [--gpu-type TYPE] [snakemake args]"
+      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--qos QOS] [--gpu [N]] [--gpu-type TYPE] [snakemake args]"
       echo "Example: $0 --time 2:00:00 --mem 16G --gpu 2 --gpu-type A100 --qos inferno --jobs 8 target_file"
       echo "GPU types: V100, RTX_6000, A40, A100, H100, H200, L40S, MI210"
       exit 0
@@ -53,11 +51,6 @@ LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
 # Adjust defaults for GPU jobs
 if [[ "$GPUS" -gt 0 ]]; then
-  # Auto-switch to GPU partition if still on CPU partition
-  if [[ "$PARTITION" == "ice-cpu" ]]; then
-    PARTITION="ice-gpu"
-  fi
-  
   # Increase memory for GPU jobs if still at default
   if [[ "$MEM" == "8G" ]]; then
     MEM="16G"
@@ -70,65 +63,45 @@ if [[ "$GPUS" -gt 0 ]]; then
   fi
 fi
 
-# Build resource flags
+# Build resource flags - ALL in one array
 RESOURCE_FLAGS=(
   walltime=$TIME
-  slurm_partition=$PARTITION
   cpus_per_task=$CPUS
   mem_mb=${MEM%G}000
+  slurm_qos=$QOS
 )
 
-# Add QOS if specified
-if [[ -n "$QOS" ]]; then
-  RESOURCE_FLAGS+=(slurm_qos=$QOS)
-fi
-
-# Add GPU resources
+# Add GPU resources if requested
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
-fi
-
-# Build SLURM extra arguments
-SLURM_EXTRA=""
-if [[ "$GPUS" -gt 0 ]]; then
+  
+  # Build and add slurm_extra for GPU
   if [[ -n "$GPU_TYPE" ]]; then
-    SLURM_EXTRA="--gres=gpu:${GPU_TYPE}:$GPUS"
+    RESOURCE_FLAGS+=(slurm_extra="--gres=gpu:${GPU_TYPE}:$GPUS")
   else
-    SLURM_EXTRA="--gres=gpu:$GPUS"
+    RESOURCE_FLAGS+=(slurm_extra="--gres=gpu:$GPUS")
   fi
 fi
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
-echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION"
+echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME"
 if [[ -n "$QOS" ]]; then
   echo "  QOS=$QOS"
 fi
 if [[ "$GPUS" -gt 0 ]]; then
   echo "  GPUS=$GPUS${GPU_TYPE:+, TYPE=$GPU_TYPE}"
-  echo "  SLURM_EXTRA: $SLURM_EXTRA"
 fi
 echo "  Logs -> $LOG_DIR"
 echo "  Targets: $@"
+echo "  Resources: ${RESOURCE_FLAGS[@]}"
 
-# Run Snakemake
-if [[ "$GPUS" -gt 0 ]]; then
-  snakemake \
-    --executor slurm \
-    -j "$JOBS" \
-    --default-resources "${RESOURCE_FLAGS[@]}" \
-    --default-resources "slurm_extra='$SLURM_EXTRA'" \
-    --retries 3 \
-    --latency-wait 30 \
-    --rerun-incomplete \
-    "$@"
-else
-  snakemake \
-    --executor slurm \
-    -j "$JOBS" \
-    --default-resources "${RESOURCE_FLAGS[@]}" \
-    --retries 3 \
-    --latency-wait 30 \
-    --rerun-incomplete \
-    "$@"
-fi
+# Run Snakemake - single --default-resources call
+snakemake \
+  --executor slurm \
+  -j "$JOBS" \
+  --default-resources "${RESOURCE_FLAGS[@]}" \
+  --retries 3 \
+  --latency-wait 30 \
+  --rerun-incomplete \
+  "$@"
