@@ -1,0 +1,33 @@
+from dataclasses import dataclass
+from typing import Self
+
+import dill
+import numpy as np
+import numpy.typing as npt
+import torch.nn as nn
+
+
+class BaseDataClass:
+    def save(self, filename: str):
+        with open(filename, "wb") as f:
+            dill.dump(self, f)
+
+    @classmethod
+    def load(cls, filename: str) -> Self:
+        with open(filename, "rb") as f:
+            return dill.load(f)
+
+
+@dataclass
+class TrainingResults(BaseDataClass):
+    """
+    Dataclass for storing data from training
+    """
+
+    model_name: str  # Model used
+    loss: npt.NDArray[np.float32]  # Loss from each epoch of training
+
+    # Training parameters
+    batch_size: int
+    learning_rate: int
+    patience: int
