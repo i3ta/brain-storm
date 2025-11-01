@@ -50,6 +50,11 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
+# Auto-switch to GPU partition if GPUs requested
+if [[ "$GPUS" -gt 0 ]] && [[ "$PARTITION" == "ice-cpu" ]]; then
+  PARTITION="ice-gpu"
+fi
+
 # Build resource flags
 RESOURCE_FLAGS=(
   walltime=$TIME
@@ -58,23 +63,18 @@ RESOURCE_FLAGS=(
   mem_mb=${MEM%G}000
 )
 
-SLURM_EXTRA_ARGS=""
-
-# If GPU requested, add GPU resources and change partition if needed
+# Add GPU resources if requested
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
-  
-  # Build GPU request string
+fi
+
+# Build SLURM extra arguments for GPU
+SLURM_EXTRA=""
+if [[ "$GPUS" -gt 0 ]]; then
   if [[ -n "$GPU_TYPE" ]]; then
-    SLURM_EXTRA_ARGS="--gres=gpu:${GPU_TYPE}:$GPUS"
+    SLURM_EXTRA="--gres=gpu:${GPU_TYPE}:$GPUS"
   else
-    SLURM_EXTRA_ARGS="--gres=gpu:$GPUS"
-  fi
-  
-  # Auto-switch to GPU partition if still on CPU partition
-  if [[ "$PARTITION" == "ice-cpu" ]]; then
-    PARTITION="ice-gpu"
-    RESOURCE_FLAGS[1]="slurm_partition=$PARTITION"
+    SLURM_EXTRA="--gres=gpu:$GPUS"
   fi
 fi
 
@@ -83,18 +83,18 @@ echo "[$(date)] Starting Snakemake with:"
 echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION"
 if [[ "$GPUS" -gt 0 ]]; then
   echo "  GPUS=$GPUS${GPU_TYPE:+, TYPE=$GPU_TYPE}"
-  echo "  SLURM_EXTRA: $SLURM_EXTRA_ARGS"
+  echo "  SLURM_EXTRA: $SLURM_EXTRA"
 fi
 echo "  Logs -> $LOG_DIR"
 echo "  Targets: $@"
 
-# Run Snakemake with or without GPU executor args
+# Run Snakemake
 if [[ "$GPUS" -gt 0 ]]; then
   snakemake \
     --executor slurm \
     -j "$JOBS" \
     --default-resources "${RESOURCE_FLAGS[@]}" \
-    --executor-arg="$SLURM_EXTRA_ARGS" \
+    --default-resources "slurm_extra='$SLURM_EXTRA'" \
     --retries 3 \
     --latency-wait 30 \
     --rerun-incomplete \
