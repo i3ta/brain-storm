@@ -50,11 +50,6 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
-# Print config
-echo "[$(date)] Starting Snakemake with:"
-echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION, GPUS=$GPUS"
-echo "  Logs -> $LOG_DIR"
-
 # Build resource flags
 RESOURCE_FLAGS=(
   walltime=$TIME
@@ -71,6 +66,11 @@ if [[ "$GPUS" -gt 0 ]]; then
     RESOURCE_FLAGS[1]="slurm_partition=$PARTITION"
   fi
 fi
+
+# Print config
+echo "[$(date)] Starting Snakemake with:"
+echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION, GPUS=$GPUS"
+echo "  Logs -> $LOG_DIR"
 
 # Run Snakemake
 snakemake \
