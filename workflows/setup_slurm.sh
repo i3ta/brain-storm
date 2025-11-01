@@ -30,11 +30,9 @@ while [[ $# -gt 0 ]]; do
       # Check if next arg is a number (e.g., --gpu 2)
       if [[ "$2" =~ ^[0-9]+$ ]]; then
         GPUS="$2"
-        PARTITION="ice-gpu"
         shift 2
       else
         GPUS=1
-        PARTITION="ice-gpu"
         shift 1
       fi
       ;;
@@ -67,10 +65,10 @@ RESOURCE_FLAGS=(
 
 # If GPU requested, add GPU resources and change partition if needed
 if [[ "$GPUS" -gt 0 ]]; then
-  RESOURCE_FLAGS+=(gres=gpu:$GPUS)
-  # Optional: auto-switch to GPU partition if user didn't specify
+  RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
   if [[ "$PARTITION" == "ice-cpu" ]]; then
     PARTITION="ice-gpu"
+    RESOURCE_FLAGS[1]="slurm_partition=$PARTITION"
   fi
 fi
 
