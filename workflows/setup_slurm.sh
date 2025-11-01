@@ -1,12 +1,9 @@
 #!/bin/bash
-
 ### SLURM + Snakemake submission helper
-
 cd ~/cs4641-team24/workflows/ # Force workflow directory
 
 # Constants
 LOG_DIR="results/logs"
-JOBS=4
 
 # Default parameters
 TIME="1:00:00"
@@ -15,7 +12,8 @@ MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
 PARTITION="ice-cpu"
-GPUS=0 # default no GPU
+GPUS=0
+GPU_TYPE=""
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -26,8 +24,8 @@ while [[ $# -gt 0 ]]; do
     --jobs) JOBS="$2"; shift 2 ;;
     --name) NAME="$2"; shift 2 ;;
     --part) PARTITION="$2"; shift 2 ;;
+    --gpu-type) GPU_TYPE="$2"; shift 2 ;;
     -g|--gpu)
-      # Check if next arg is a number (e.g., --gpu 2)
       if [[ "$2" =~ ^[0-9]+$ ]]; then
         GPUS="$2"
         shift 2
@@ -37,8 +35,9 @@ while [[ $# -gt 0 ]]; do
       fi
       ;;
     --help)
-      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--part PARTITION] [--gpu [N]] [snakemake args]"
-      echo "Example: $0 --time 2:00:00 --mem 16G --gpu 1 --jobs 8"
+      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--part PARTITION] [--gpu [N]] [--gpu-type TYPE] [snakemake args]"
+      echo "Example: $0 --time 2:00:00 --mem 16G --gpu 2 --gpu-type A100 --jobs 8"
+      echo "GPU types: V100, RTX_6000, A40, A100, H100, H200, L40S, MI210"
       exit 0
       ;;
     *) break ;;
@@ -63,7 +62,15 @@ EXTRA_EXECUTOR_ARGS=""
 # If GPU requested, add GPU resources and change partition if needed
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
-  EXTRA_EXECUTOR_ARGS="--gres=gpu:${GPU_TYPE:-""}:$GPUS"
+  
+  # Build GPU request string
+  if [[ -n "$GPU_TYPE" ]]; then
+    EXTRA_EXECUTOR_ARGS="--gres=gpu:${GPU_TYPE}:$GPUS"
+  else
+    EXTRA_EXECUTOR_ARGS="--gres=gpu:$GPUS"
+  fi
+  
+  # Auto-switch to GPU partition if still on CPU partition
   if [[ "$PARTITION" == "ice-cpu" ]]; then
     PARTITION="ice-gpu"
     RESOURCE_FLAGS[1]="slurm_partition=$PARTITION"
@@ -72,7 +79,10 @@ fi
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
-echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION, GPUS=$GPUS"
+echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION"
+if [[ "$GPUS" -gt 0 ]]; then
+  echo "  GPUS=$GPUS${GPU_TYPE:+, TYPE=$GPU_TYPE}"
+fi
 echo "  Logs -> $LOG_DIR"
 
 # Run Snakemake
@@ -80,7 +90,8 @@ snakemake \
   --executor slurm \
   -j "$JOBS" \
   --default-resources "${RESOURCE_FLAGS[@]}" \
-  --executor-arg="$EXTRA_EXECUTOR_ARGS" \
-  --slurm-logdir ~/.snakemake/slurm_logs/"$LOG_DIR" \
+  --retries 3 \
   --latency-wait 30 \
+  --rerun-incomplete \
+  ${EXTRA_EXECUTOR_ARGS:+--set-resources "*:slurm_extra='$EXTRA_EXECUTOR_ARGS'"} \
   "$@"
