@@ -35,10 +35,10 @@ def main(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"PyTorch version: {torch.__version__}")
     print(f"CUDA version: {torch.version.cuda}")
+    print("PyTorch CUDA available:", torch.cuda.is_available())
+    print("GPU count:", torch.cuda.device_count())
     if torch.cuda.is_available():
-        print("Using CUDA for training")
-    else:
-        print("Using CPU for training")
+        print("GPU name:", torch.cuda.get_device_name(0))
 
     # TODO: Add each model here. The model just takes in a string, so you can pass
     #       parameters as part of the string to specify parameters for
