@@ -46,12 +46,20 @@ def main(
     if model_name == "vgg16_pretrained":
         model = models.vgg16(weights=models.VGG16_Weights.IMAGENET1K_V1)
         model.classifier[6] = nn.Linear(model.classifier[6].in_features, 4)
-        model = model.to(device)
+
+        # Resize image to 224x224 for VGGNet
+        transform = transforms.Compose(
+            [transforms.Resize((224, 224)), transforms.ToTensor()]
+        )
+    elif model_name == "vgg16":
+        model = models.vgg16(weights=None)
+        model.classifier[6] = nn.Linear(model.classifier[6].in_features, 4)
         transform = transforms.Compose(
             [transforms.Resize((224, 224)), transforms.ToTensor()]
         )
     else:
         raise NotImplementedError(f"The model {model_name} cannot be found")
+    model = model.to(device)
 
     # Training parameters
     epochs = cfg["epochs"]
