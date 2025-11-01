@@ -62,6 +62,15 @@ if [[ "$GPUS" -gt 0 ]]; then
   fi
 fi
 
+# Build resource flags
+RESOURCE_FLAGS=(
+  walltime=$TIME
+  cpus_per_task=$CPUS
+  mem_mb=${MEM%G}000
+  slurm_qos=$QOS
+  slurm_partition=$PART
+)
+
 # Add GPU resources if requested
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
@@ -74,15 +83,6 @@ if [[ "$GPUS" -gt 0 ]]; then
     RESOURCE_FLAGS+=(slurm_extra="--gres=gpu:$GPUS")
   fi
 fi
-
-# Build resource flags - ALL in one array
-RESOURCE_FLAGS=(
-  walltime=$TIME
-  cpus_per_task=$CPUS
-  mem_mb=${MEM%G}000
-  slurm_qos=$QOS
-  slurm_partition=$PART
-)
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
