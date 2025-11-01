@@ -11,9 +11,10 @@ CPUS=4
 MEM="8G"
 JOBS=4
 NAME="cs4641-team24"
-QOS="coc-cpu"
-GPUS=0 # default no GPU
-GPU_TYPE="" # optional GPU type specification
+PARTITION="ice-cpu"
+QOS=""
+GPUS=0
+GPU_TYPE=""
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -23,10 +24,10 @@ while [[ $# -gt 0 ]]; do
     --mem) MEM="$2"; shift 2 ;;
     --jobs) JOBS="$2"; shift 2 ;;
     --name) NAME="$2"; shift 2 ;;
-    --qos) QOS="$2"; shift 2 ;;
+    --part) PARTITION="$2"; shift 2 ;;
+    --qos) QOS="$2"; shift 2 ;;  # Add QOS flag
     --gpu-type) GPU_TYPE="$2"; shift 2 ;;
     -g|--gpu)
-      # Check if next arg is a number (e.g., --gpu 2)
       if [[ "$2" =~ ^[0-9]+$ ]]; then
         GPUS="$2"
         shift 2
@@ -36,7 +37,7 @@ while [[ $# -gt 0 ]]; do
       fi
       ;;
     --help)
-      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--qos QOS] [--gpu [N]] [--gpu-type TYPE] [snakemake args]"
+      echo "Usage: $0 [--time hh:mm:ss] [--cpus N] [--mem SIZE] [--jobs N] [--name JOBNAME] [--part PARTITION] [--qos QOS] [--gpu [N]] [--gpu-type TYPE] [snakemake args]"
       echo "Example: $0 --time 2:00:00 --mem 16G --gpu 2 --gpu-type A100 --qos inferno --jobs 8 target_file"
       echo "GPU types: V100, RTX_6000, A40, A100, H100, H200, L40S, MI210"
       exit 0
@@ -52,13 +53,18 @@ LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
 # Adjust defaults for GPU jobs
 if [[ "$GPUS" -gt 0 ]]; then
-  QOS="coc-gpu"
-
+  # Auto-switch to GPU partition if still on CPU partition
+  if [[ "$PARTITION" == "ice-cpu" ]]; then
+    PARTITION="ice-gpu"
+  fi
+  
+  # Increase memory for GPU jobs if still at default
   if [[ "$MEM" == "8G" ]]; then
     MEM="16G"
     echo "Note: Increased memory to 16G for GPU job"
   fi
   
+  # Ensure reasonable CPU count for GPU
   if [[ "$CPUS" -lt 4 ]]; then
     CPUS=4
   fi
@@ -67,17 +73,22 @@ fi
 # Build resource flags
 RESOURCE_FLAGS=(
   walltime=$TIME
+  slurm_partition=$PARTITION
   cpus_per_task=$CPUS
   mem_mb=${MEM%G}000
-  slurm_qos=$QOS
 )
 
-# Add GPU resources if requested
+# Add QOS if specified
+if [[ -n "$QOS" ]]; then
+  RESOURCE_FLAGS+=(slurm_qos=$QOS)
+fi
+
+# Add GPU resources
 if [[ "$GPUS" -gt 0 ]]; then
   RESOURCE_FLAGS+=(gpus_per_task=$GPUS)
 fi
 
-# Build SLURM extra arguments for GPU
+# Build SLURM extra arguments
 SLURM_EXTRA=""
 if [[ "$GPUS" -gt 0 ]]; then
   if [[ -n "$GPU_TYPE" ]]; then
@@ -89,7 +100,7 @@ fi
 
 # Print config
 echo "[$(date)] Starting Snakemake with:"
-echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME"
+echo "  TIME=$TIME, CPUS=$CPUS, MEM=$MEM, JOBS=$JOBS, NAME=$NAME, PART=$PARTITION"
 if [[ -n "$QOS" ]]; then
   echo "  QOS=$QOS"
 fi
