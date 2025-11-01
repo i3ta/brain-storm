@@ -33,6 +33,8 @@ def main(
         cfg (dict): Training config
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"PyTorch version: {torch.__version__}")
+    print(f"CUDA version: {torch.version.cuda}")
     if torch.cuda.is_available():
         print("Using CUDA for training")
     else:
