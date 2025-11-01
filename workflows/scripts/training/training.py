@@ -110,6 +110,8 @@ def main(
             if epochs_no_impr >= patience:
                 break
 
+    print(f"Final training loss: {train_loss[-1]}")
+
     # Save data
     training_results = TrainingResults(
         model_name=model_name,
