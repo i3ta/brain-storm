@@ -88,22 +88,24 @@ fi
 echo "  Logs -> $LOG_DIR"
 echo "  Targets: $@"
 
-# Build snakemake command
-SNAKEMAKE_CMD=(
-  snakemake
-  --executor slurm
-  -j "$JOBS"
-  --default-resources "${RESOURCE_FLAGS[@]}"
-  --retries 3
-  --latency-wait 30
-  --rerun-incomplete
-)
-
-# Add GPU-specific executor args if needed
-if [[ -n "$SLURM_EXTRA_ARGS" ]]; then
-  SNAKEMAKE_CMD+=(--set-resources "*:slurm_extra='$SLURM_EXTRA_ARGS'")
+# Run Snakemake with or without GPU executor args
+if [[ "$GPUS" -gt 0 ]]; then
+  snakemake \
+    --executor slurm \
+    -j "$JOBS" \
+    --default-resources "${RESOURCE_FLAGS[@]}" \
+    --executor-arg="$SLURM_EXTRA_ARGS" \
+    --retries 3 \
+    --latency-wait 30 \
+    --rerun-incomplete \
+    "$@"
+else
+  snakemake \
+    --executor slurm \
+    -j "$JOBS" \
+    --default-resources "${RESOURCE_FLAGS[@]}" \
+    --retries 3 \
+    --latency-wait 30 \
+    --rerun-incomplete \
+    "$@"
 fi
-
-# Add any remaining arguments and run
-SNAKEMAKE_CMD+=("$@")
-"${SNAKEMAKE_CMD[@]}"
