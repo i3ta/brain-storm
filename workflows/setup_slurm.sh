@@ -50,8 +50,22 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 LOG_DIR="$LOG_DIR/${TIMESTAMP}"
 
+time_to_minutes() {
+  IFS=':' read -r h m s <<< "$1"
+  echo $((10#${h} * 60 + 10#${m} + (10#${s} / 60)))
+}
+
+# Compute runtime in minutes (Snakemake expects minutes)
+if [[ "$TIME" == *:*:* ]]; then
+  RUNTIME=$(time_to_minutes "$TIME")
+else
+  RUNTIME="$TIME"  # assume user gave minutes directly
+fi
+
 # Adjust defaults for GPU jobs
 if [[ "$GPUS" -gt 0 ]]; then
+  PART="ice-gpu"
+
   if [[ "$MEM" == "8G" ]]; then
     MEM="16G"
     echo "Note: Increased memory to 16G for GPU job"
@@ -62,13 +76,9 @@ if [[ "$GPUS" -gt 0 ]]; then
   fi
 fi
 
-if [[ "$GPUS" -gt 0 ]]; then
-  PART="ice-gpu"
-fi
-
 # Build resource flags
 RESOURCE_FLAGS=(
-  walltime=$TIME
+  runtime=$RUNTIME
   cpus_per_task=$CPUS
   mem_mb=${MEM%G}000
   slurm_qos=$QOS
