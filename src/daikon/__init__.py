@@ -1,1 +1,1 @@
-from . import eda, preprocessing
+from . import eda, models, preprocessing

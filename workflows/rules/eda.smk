@@ -3,7 +3,7 @@ CLUSTERS = list(range(1, 19))
 
 rule run_eda_folder:
     input:
-        "../data/{folder}/{type}"
+        "../data/raw/{folder}/{type}"
     output:
         "results/{folder}/summary/{type}_data_summary.pkl"
     script:
@@ -27,7 +27,7 @@ rule run_image_dim_dist:
 
 rule run_class_histograms:
     input:
-        "../data/{folder}/{type}"
+        "../data/raw/{folder}/{type}"
     output:
         "results/{folder}/hist/data/{type}_hist.pkl"
     script:
@@ -41,12 +41,29 @@ rule run_histogram_clustering:
     script:
         "../scripts/eda/histogram_clustering.py"
 
+rule run_class_rings:
+    input:
+        "../data/raw/{folder}/{type}"
+    output:
+        "results/{folder}/rings/data/{type}_hist.pkl"
+    script:
+        "../scripts/eda/class_rings.py"
+
+rule run_rings_clustering:
+    input:
+        lambda wildcards: expand("results/{folder}/rings/data/{classes}_hist.pkl", folder=wildcards.folder, classes=CLASSES)
+    output:
+        "results/{folder}/rings/cluster/cluster_{k}.pkl"
+    script:
+        "../scripts/eda/rings_clustering.py"
+
 rule run_visualize_clustering:
     input:
-        lambda wildcards: expand("results/{folder}/hist/cluster/cluster_{clusters}.pkl", folder=wildcards.folder, clusters=CLUSTERS),
-        lambda wildcards: expand("../data/{folder}/{classes}", folder=wildcards.folder, classes=CLASSES)
+        lambda wildcards: expand("results/{folder}/{cluster_type}/cluster/cluster_{clusters}.pkl", 
+          folder=wildcards.folder, cluster_type=wildcards.cluster_type, clusters=CLUSTERS),
+        lambda wildcards: expand("../data/raw/{folder}/{classes}", folder=wildcards.folder, classes=CLASSES)
     output:
-        "results/{folder}/hist/cluster_{k}.png",
-        "results/{folder}/hist/example_{k}.png"
+        "results/{folder}/{cluster_type}/cluster_{k}.png",
+        "results/{folder}/{cluster_type}/example_{k}.png"
     script:
         "../scripts/eda/visualize_clustering.py"

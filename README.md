@@ -59,19 +59,21 @@ instructions to get started. This setup takes a bit more time, but can be
 beneficial if there is a lot of data to process.
 
 1. Get access to PACE-ICE and use ssh to connect to PACE.
-2. Install
-   [miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-2)
-   and activate the environment.
+2. Activate Anaconda 3
+
+   ```sh
+   module load anaconda3
+   ```
+
 3. Download the dataset files into the scratch folder. This folder has a larger
    capacity than your home folder. Make sure the dataset folder is directly in
    the `scratch` folder (your dataset should be at
    `~/scratch/brain-tumor-dataset/`).
-4. Clone this repository and create the `data/` folder at the root of the
-   repository
-5. Create a symlink to the dataset in your scratch folder:
+4. Clone this repository and `cd` into the root of the repository
+5. Create a symlink to the scratch folder to serve as your data folder:
 
    ```sh
-   ln -s ~/scratch/brain-tumor-dataset data/brain-tumor-dataset
+   ln -s ~/scratch/ data/
    ```
 
 6. Create the PACE environment, which is different from the normal development
@@ -89,7 +91,9 @@ beneficial if there is a lot of data to process.
 
 8. To run the snakemake pipeline, run snakemake as you normally would from the
    `workflow/` folder, but instead of calling `snakemake -c 1`, call
-   `setup_slurm.sh <output files>`
+   `./setup_slurm.sh <output files>`
+
+> For more information, check out [Intro to PACE ICE](https://github.com/guru-desh/Intro-To-PACE-ICE)
 
 ### Pages
 
