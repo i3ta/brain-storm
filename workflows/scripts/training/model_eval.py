@@ -54,6 +54,7 @@ def main(
     # Save results
     eval_results = ModelEvaluation(
         model_name=training_results.model_name,
+        labels=classes,
         y_pred=np.array(y_pred, dtype=np.float32),
         y_true=np.array(y_true, dtype=np.float32),
         confusion=np.array(confusion, dtype=np.float32),

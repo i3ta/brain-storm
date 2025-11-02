@@ -39,9 +39,11 @@ class ModelEvaluation(BaseDataClass):
     """
 
     model_name: str
+    labels: list[str]
     y_pred: npt.NDArray[np.float32]
     y_true: npt.NDArray[np.float32]
     confusion: npt.NDArray[np.float32]
     f1: float
-    roc: npt.NDArray[np.float32]
+    fpr: npt.NDArray[np.float32]
+    tpr: npt.NDArray[np.float32]
     auc_roc: float
