@@ -2,7 +2,8 @@ import numpy as np
 import numpy.typing as npt
 import torch
 import torch.nn as nn
-from sklearn.metrics import auc, confusion_matrix, f1_score, label_binarize, roc_curve
+from sklearn.metrics import auc, confusion_matrix, f1_score, roc_curve
+from sklearn.preprocessing import label_binarize
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
