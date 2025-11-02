@@ -22,6 +22,6 @@ rule run_model_eval:
         "results/{folder}/training/{model_name}.pkl",
         "../data/processed/{folder}/test/"
     output:
-        "results/{folder}/training/{model_name}_eval.png"
+        "results/{folder}/training/{model_name}_eval.pkl"
     script:
         "../scripts/training/model_eval.py"
