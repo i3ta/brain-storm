@@ -78,6 +78,9 @@ def get_roc(
     """
     y_true = label_binarize(ground_truth, classes=range(len(classes)))
 
+    print(f"y_true: {y_true.shape}")
+    print(f"y_pred: {y_pred.shape}")
+
     # Compute micro-average ROC
     fpr, tpr, _ = roc_curve(y_true.ravel(), y_pred.ravel())
     roc_auc = auc(fpr, tpr)
