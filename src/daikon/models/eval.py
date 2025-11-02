@@ -78,6 +78,7 @@ def get_roc(
     """
     y_true = label_binarize(ground_truth, classes=range(len(classes)))
 
+    print(f"Classes: {classes}")
     print(f"y_true: {y_true.shape}")
     print(f"y_pred: {y_pred.shape}")
 
