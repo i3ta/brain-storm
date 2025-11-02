@@ -2,7 +2,7 @@ rule train_model:
     input:
         "../data/processed/{folder}/train/",
         "../data/processed/{folder}/cv/",
-        "../../src/daikon/models/models.py"
+        "../src/daikon/models/models.py"
     output:
         "../data/processed/{folder}/models/{model_name}.pkl",
         "results/{folder}/training/{model_name}.pkl",
