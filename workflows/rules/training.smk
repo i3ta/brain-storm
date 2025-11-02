@@ -25,3 +25,11 @@ rule run_model_eval:
         "results/{folder}/eval/{model_name}_eval.pkl"
     script:
         "../scripts/training/model_eval.py"
+
+rule run_model_eval_vis:
+    input:
+        "results/{folder}/eval/{model_name}_eval.pkl"
+    output:
+        "results/{folder}/eval/{model_name}_eval.png"
+    script:
+        "../scripts/training/model_eval_vis.py"
