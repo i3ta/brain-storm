@@ -4,7 +4,6 @@ from typing import Self
 import dill
 import numpy as np
 import numpy.typing as npt
-import torch.nn as nn
 
 
 class BaseDataClass:
@@ -31,3 +30,18 @@ class TrainingResults(BaseDataClass):
     batch_size: int
     learning_rate: int
     patience: int
+
+
+@dataclass
+class ModelEvaluation(BaseDataClass):
+    """
+    Dataclass for storing model evaluation results
+    """
+
+    model_name: str
+    y_pred: npt.NDArray[np.float32]
+    y_true: npt.NDArray[np.float32]
+    confusion: npt.NDArray[np.float32]
+    f1: float
+    roc: npt.NDArray[np.float32]
+    auc_roc: float

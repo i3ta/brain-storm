@@ -45,8 +45,11 @@ class BrainTumorDataset(Dataset):
         label = torch.tensor(self.labels[idx], dtype=torch.long)
         return image, label
 
-    def get_class_index(self, label: str):
+    def get_class_index(self, label: str) -> int:
         return self.classes.index(label)
 
-    def get_class_name(self, index: int):
+    def get_class_name(self, index: int) -> str:
         return self.classes[index]
+
+    def get_classes(self) -> list[str]:
+        return self.classes

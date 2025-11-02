@@ -4,13 +4,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision.models as models
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
-from daikon.models import BrainTumorDataset
-from daikon.models.dataclasses import TrainingResults
+from daikon.models import BrainTumorDataset, TrainingResults, get_model
 
 
 def main(
@@ -40,25 +37,7 @@ def main(
     if torch.cuda.is_available():
         print("GPU name:", torch.cuda.get_device_name(0))
 
-    # TODO: Add each model here. The model just takes in a string, so you can pass
-    #       parameters as part of the string to specify parameters for
-    #       hyperparameter tuning.
-    if model_name == "vgg16_pretrained":
-        model = models.vgg16(weights=models.VGG16_Weights.IMAGENET1K_V1)
-        model.classifier[6] = nn.Linear(model.classifier[6].in_features, 4)
-
-        # Resize image to 224x224 for VGGNet
-        transform = transforms.Compose(
-            [transforms.Resize((224, 224)), transforms.ToTensor()]
-        )
-    elif model_name == "vgg16":
-        model = models.vgg16(weights=None)
-        model.classifier[6] = nn.Linear(model.classifier[6].in_features, 4)
-        transform = transforms.Compose(
-            [transforms.Resize((224, 224)), transforms.ToTensor()]
-        )
-    else:
-        raise NotImplementedError(f"The model {model_name} cannot be found")
+    model, transform = get_model(model_name)
     model = model.to(device)
 
     # Training parameters
