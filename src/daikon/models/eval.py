@@ -35,7 +35,7 @@ def test_model(
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     # Get output labels
-    labels = test_dataset.get_classes()
+    classes = test_dataset.get_classes()
 
     # Test the model
     pred = []
@@ -51,7 +51,7 @@ def test_model(
 
     pred = np.vstack(pred)
     ground_truth = np.concatenate(ground_truth)
-    return pred, ground_truth, labels
+    return pred, ground_truth, classes
 
 
 def get_confusion_f1(
@@ -77,10 +77,6 @@ def get_roc(
     Get the ROC curve and the area under the curve
     """
     y_true = label_binarize(ground_truth, classes=range(len(classes)))
-
-    print(f"Classes: {classes}")
-    print(f"y_true: {y_true.shape}")
-    print(f"y_pred: {y_pred.shape}")
 
     # Compute micro-average ROC
     fpr, tpr, _ = roc_curve(y_true.ravel(), y_pred.ravel())
