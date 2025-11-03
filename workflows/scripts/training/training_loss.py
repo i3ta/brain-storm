@@ -14,7 +14,7 @@ def main(results_path: str, output: str):
     """
     results = TrainingResults.load(results_path)
 
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
     x_labels = np.arange(0, results.loss.shape[0])
     ax.plot(x_labels, results.loss)
