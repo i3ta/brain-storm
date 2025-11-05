@@ -25,6 +25,8 @@ class BrainTumorDataset(Dataset):
         self.labels = []
         for c in self.classes:
             src_dir = os.path.join(self.data_dir, c)
+            if not os.path.isdir(src_dir):
+                continue
             for image in os.listdir(src_dir):
                 if image.lower().endswith(image_extensions):
                     # is an image

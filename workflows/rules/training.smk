@@ -2,6 +2,7 @@ rule train_model:
     input:
         "../data/processed/{folder}/train/",
         "../data/processed/{folder}/cv/",
+        "../src/daikon/models/models.py"
     output:
         "../data/processed/{folder}/models/{model_name}.pkl",
         "results/{folder}/training/{model_name}.pkl",
@@ -25,3 +26,11 @@ rule run_model_eval:
         "results/{folder}/eval/{model_name}_eval.pkl"
     script:
         "../scripts/training/model_eval.py"
+
+rule run_model_eval_vis:
+    input:
+        "results/{folder}/eval/{model_name}_eval.pkl"
+    output:
+        "results/{folder}/eval/{model_name}_eval.png"
+    script:
+        "../scripts/training/model_eval_vis.py"

@@ -47,6 +47,7 @@ export const Proposal = () => {
       <Divider />
       <div className="clear-both">
         <Image
+          float
           src={pituitaryImage}
           alt="MRI scan of human head with pituitary tumor"
           className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
@@ -185,6 +186,7 @@ export const Proposal = () => {
       <ul className="list-disc list-outside ml-8 space-y-2 pb-2">
         <li className="clear-both">
           <Image
+            float
             src="https://media.geeksforgeeks.org/wp-content/uploads/20240708132251/confusion-Matrix.PNG"
             alt="Image of confusion matrix of 3 classes. Source: GeeksForGeeks"
             className="max-w-sm ml-4 mb-4"

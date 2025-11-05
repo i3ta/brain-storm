@@ -305,6 +305,4 @@ dependencies:
   - zlib-ng=2.2.5=h3470cca_0
   - zstandard=0.25.0=py312h37e1c23_0
   - zstd=1.5.7=h6491c7d_2
-  - pip:
-      - daikon==0.0.1
 prefix: /opt/anaconda3/envs/cs4641-project

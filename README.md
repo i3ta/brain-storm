@@ -49,6 +49,12 @@ Then, before running the scripts, run the following to activate the environment:
 conda activate cs4641-project
 ```
 
+Finally, from the root of the repository install the local package manually:
+
+```sh
+pip install -e .
+```
+
 This will install all dependencies, as well as set up the local package in edit
 mode so you can edit code and import it in whatever scripts you want to run.
 

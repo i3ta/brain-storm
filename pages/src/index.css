@@ -139,8 +139,8 @@ body {
 
   html,
   body {
-    height: auto;
-    overflow: visible;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   p,
@@ -152,6 +152,15 @@ body {
 
   .print-hide {
     display: none;
+  }
+
+  .print-padding {
+    width: 1px;
+    height: 100vh;
+  }
+
+  .image-container {
+    break-inside: avoid;
   }
 }
 

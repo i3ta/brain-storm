@@ -35,7 +35,7 @@ def test_model(
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     # Get output labels
-    labels = test_dataset.get_classes()
+    classes = test_dataset.get_classes()
 
     # Test the model
     pred = []
@@ -51,7 +51,7 @@ def test_model(
 
     pred = np.vstack(pred)
     ground_truth = np.concatenate(ground_truth)
-    return pred, ground_truth, labels
+    return pred, ground_truth, classes
 
 
 def get_confusion_f1(
