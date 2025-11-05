@@ -57,6 +57,7 @@ export const Midterm = () => {
       <Divider />
       <div className="clear-both">
         <Image
+          float
           src={pituitaryImage}
           alt="MRI scan of human head with pituitary tumor"
           className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
@@ -247,7 +248,7 @@ export const Midterm = () => {
       <Image
         src={raw_data}
         alt="Figure 1: Summary of image dimensions and image contrasts for each class across the dataset. Top: 8 most common image dimensions by image class. Bottom: violin plot of image contrasts by image class."
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -301,12 +302,12 @@ export const Midterm = () => {
       <Image
         src={hist_cluster_4}
         alt="Figure 2: Distortion vs. number of clusters for brightness histogram clustering"
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
       <Image
         src={rings_cluster_4}
         alt="Figure 3: Distortion vs. number of clusters for clustering based on average radial pixel brightness"
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -323,12 +324,12 @@ export const Midterm = () => {
       <Image
         src={hist_example_4}
         alt="Figure 4: Example images for clustering based on pixel brightness histograms"
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
       <Image
         src={rings_example_4}
         alt="Figure 5: Example images for clustering based on average radial pixel brightness"
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -343,8 +344,8 @@ export const Midterm = () => {
 
       <Image
         src={vgg16_loss}
-        alt=""
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        alt="Figure 6: Loss of VGGNet 16 training."
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -359,8 +360,8 @@ export const Midterm = () => {
 
       <Image
         src={vgg16_pretrained_loss}
-        alt=""
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        alt="Figure 7: Loss of VGGNet 16 training with pretrained weights."
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -375,8 +376,8 @@ export const Midterm = () => {
 
       <Image
         src={vgg16_eval}
-        alt=""
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        alt="Figure 8: Evaluation of trained VGGNet 16 model."
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>
@@ -395,8 +396,8 @@ export const Midterm = () => {
 
       <Image
         src={vgg16_pretrained_eval}
-        alt=""
-        className="h-full max-h-96 rounded-lg object-contain shadow-sm m-4"
+        alt="Figure 9: Evaluation of trained VGGNet 16 model with pretrained weights."
+        className="h-full max-h-80 rounded-lg object-contain shadow-sm m-4"
       />
 
       <Text>

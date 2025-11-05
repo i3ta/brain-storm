@@ -2,11 +2,25 @@ import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
 import { Text } from "./text";
 
-export const Image = ({ className, alt, ...props }: ComponentProps<"img">) => {
+export interface ImageProps extends ComponentProps<"img"> {
+  float?: boolean;
+}
+
+export const Image = ({
+  float = false,
+  className,
+  alt,
+  ...props
+}: ImageProps) => {
   return (
-    <div className="float-right flex flex-col items-stretch">
+    <div
+      className={cn(
+        `image-container flex flex-col items-center`,
+        float ? "float-right" : "float-none inline-flex",
+      )}
+    >
       <img className={cn(className)} alt={alt} {...props} />
-      <Text size="c" className="text-center">
+      <Text size="c" className="text-center max-w-11/12">
         {alt}
       </Text>
     </div>

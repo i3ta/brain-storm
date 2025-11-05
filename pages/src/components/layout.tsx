@@ -36,6 +36,7 @@ export const Layout = () => {
         </Tabs>
       </div>
       <Outlet />
+      <div className="print-padding" />
       <div
         className={cn(
           "print-hide",
