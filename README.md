@@ -2,6 +2,24 @@
 
 This is the repository for the Georgia Tech CS 4641 Fall 2025 project for team 24.
 
+## Repository Outline
+
+- `/pages/`: Website files
+- `/workflows`: Files for Snakemake pipeline
+  - `/workflows/config/config.yaml`: Pipeline config file
+  - `/workflows/results/`: Results/outputs from pipeline
+  - `/workflows/rules/`: Rule files defining Snakemake pipeline
+  - `/workflows/scripts/`: Python scripts for Snakemake pipeline
+  - `/workflows/Snakefile`: Main Snakemake entrypoint
+  - `/workflows/setup_slurm.sh`: Script setting up Snakemake command for Pace
+- `/src/daikon`: Local development package and code
+  - `/src/daikon/eda/`: Python functions and dataclasses for EDA
+  - `/src/daikon/models/`: Python functions and dataclasses for setting up ML models
+  - `/src/daikon/preprocessing/`: Python functions and dataclasses for preprocessing images
+- `/tests/`: Jupyter notebooks to test code before creating functions or adding to pipeline
+- `/docs/`: Notes from the development process
+- `/environments/`: Conda environment files for local and Pace
+
 ## Notes
 
 This repository is currently a work in progress. Read below for more
