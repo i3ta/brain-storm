@@ -8,6 +8,8 @@ This is the repository for the Georgia Tech CS 4641 Fall 2025 project for team 2
 - `/workflows`: Files for Snakemake pipeline
   - `/workflows/config/config.yaml`: Pipeline config file
   - `/workflows/results/`: Results/outputs from pipeline
+    - `/workflows/results/brain-tumor-50/`: Results from local pipeline testing
+    - `/workflows/results/brain-tumor-dataset/`: Actual results folder
   - `/workflows/rules/`: Rule files defining Snakemake pipeline
   - `/workflows/scripts/`: Python scripts for Snakemake pipeline
   - `/workflows/Snakefile`: Main Snakemake entrypoint
