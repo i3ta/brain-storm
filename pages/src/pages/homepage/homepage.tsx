@@ -29,6 +29,7 @@ export const Home = () => {
       </Text>
       <div className="gap-12 clear-both">
         <Image
+          float
           src={pituitaryImage}
           alt="MRI scan of human head with pituitary tumor"
           className="h-full max-h-96 rounded-lg object-contain shadow-sm"
