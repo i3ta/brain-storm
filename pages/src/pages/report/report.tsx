@@ -466,8 +466,10 @@ export const Report = () => {
         Swin Transformer
       </Text>
       <Text>
-        The swin transformer models are by far the most complex models and
-        should in theory be able to capture the most complex patterns.
+        After training, both models were evaluated to determine its
+        effectiveness in identifying tumors. The swin transformer models are by
+        far the most complex models and should in theory be able to capture the
+        most complex patterns.
       </Text>
       <Image
         src={swin_transformer_loss}
