@@ -447,7 +447,7 @@ export const Report = () => {
       <Text>
         Interestingly, all of the metrics of the ResNet model with randomized
         initial weights performed worse than the simpler VGGNet. The F-score of
-        0.86 is significantly higher than that of the two VGGNets, and the area
+        0.86 is significantly lower than that of the two VGGNets, and the area
         under the ROC curve is also lower than that of the VGGNets, albeit still
         being relatively high.
       </Text>
