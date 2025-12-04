@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.gatech.edu/pages/chung62/cs4641-team24/",
+  "homepage": "https://github.com/i3ta/brain-storm",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

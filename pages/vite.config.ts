@@ -11,5 +11,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/pages/chung62/cs4641-team24/",
+  base: "/brain-storm/",
 });

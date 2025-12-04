@@ -6,7 +6,7 @@ import { RedirectHandler } from "./lib/redirect";
 import { Midterm } from "./pages/midterm/midterm";
 import { Report } from "./pages/report/report";
 
-const basename = "/pages/chung62/cs4641-team24/";
+const basename = "/brain-storm/";
 
 function App() {
   return (
