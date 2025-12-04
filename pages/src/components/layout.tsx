@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Toaster } from "./ui/sonner";
 import { Text } from "./ui/text";
+import { GithubIcon } from "lucide-react";
 
 export const Layout = () => {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ export const Layout = () => {
             <TabsTrigger value="report">Final Report</TabsTrigger>
           </TabsList>
         </Tabs>
+        <a href="https://github.com/i3ta/brain-storm" target="_blank">
+          <GithubIcon className="absolute top-6 right-8 cursor-pointer hover:opacity-50 transition-all" />
+        </a>
       </div>
       <Outlet />
       <div className="print-padding" />
