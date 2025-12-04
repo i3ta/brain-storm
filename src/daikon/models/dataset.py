@@ -17,8 +17,12 @@ class BrainTumorDataset(Dataset):
         self.data_dir = data_dir
         self.transform = transform
 
-        # Get folders/classes
-        self.classes = os.listdir(self.data_dir)
+        # Get folders/classes - only include directories
+        self.classes = [
+            c
+            for c in os.listdir(self.data_dir)
+            if os.path.isdir(os.path.join(self.data_dir, c))
+        ]
 
         # Get image paths and labels
         self.images = []
